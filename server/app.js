@@ -1,5 +1,11 @@
 const express = require('express');
+require('express-async-errors');
 const app = express();
+app.use(express.json())
+
+
+app.use("/static", express.static("assets"))
+
 
 // For testing purposes, GET /
 app.get('/', (req, res) => {
@@ -18,6 +24,10 @@ app.post('/test-json', (req, res, next) => {
 app.get('/test-error', async (req, res) => {
   throw new Error("Hello World!")
 });
+
+app.use((err, req, res, next) => {
+  res.json(`Error: ${err.message}`)
+})
 
 const port = 5000;
 app.listen(port, () => console.log('Server is listening on port', port));
